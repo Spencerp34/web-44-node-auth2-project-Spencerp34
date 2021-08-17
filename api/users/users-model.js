@@ -49,7 +49,7 @@ async function findBy(filter) {
     return user
 }
 
-function findById(user_id) {
+async function findById(user_id) {
   /**
     You will need to join two tables.
     Resolves to the user with the given user_id.
