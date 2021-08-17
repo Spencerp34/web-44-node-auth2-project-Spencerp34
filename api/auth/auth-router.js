@@ -8,7 +8,7 @@ const User = require('../users/users-model')
 
 function buildToken(user){
   const payload = {
-    user_id: user.user_id,
+    subject: user.user_id,
     username: user.username,
     role_name: user.role_name
   }
@@ -39,7 +39,7 @@ router.post("/register", validateRoleName, async(req, res) => {
     user.password = hash
 
     const newUser = await User.add(user)
-    res.status(201).json(newUser)
+    res.status(201).json(newUser[0])
     // res.json({message: hash})
 
 });

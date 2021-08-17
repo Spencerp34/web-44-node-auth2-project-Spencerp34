@@ -67,13 +67,15 @@ const checkUsernameExists = async(req, res, next) => {
   */
     const {username} = req.body
     const exists = await User.findBy({username})
+    
 
-    if(!exists){
+    if(!exists || !req.body.password){
+      
       next({status: 401, message: 'Invalid credentials'})
     }else{
-      const hashed = await db('users').where('users.username', username).select('users.password')
-      const passy = hashed[0].password
-      req.password = passy
+      const array = await db('users').where('users.username', username).select('users.password')
+      const hashed = array[0].password
+      req.password = hashed
       next()
     }
 }
