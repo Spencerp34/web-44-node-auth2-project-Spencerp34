@@ -32,7 +32,7 @@ router.post("/register", validateRoleName, async(req, res) => {
       "role_name": "angel"
     }
    */
-
+    req.body.role_name = req.role_name
     const user = req.body;
     const hash = bcrypt.hashSync(user.password, 11)
 
@@ -77,7 +77,7 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
         token
       })
     }else{
-      next({ status: 401, message: 'Invalid Credentials' });
+      next({ status: 401, message: 'Invalid credentials' });
     }
     
 

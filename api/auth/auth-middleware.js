@@ -66,7 +66,8 @@ const checkUsernameExists = async(req, res, next) => {
     }
   */
     const {username} = req.body
-    const exists = await User.findBy({username})
+    const result = await User.findBy({username})
+    const exists = result[0]
     
 
     if(!exists || !req.body.password){
