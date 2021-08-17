@@ -1,6 +1,7 @@
 const { JWT_SECRET } = require("../secrets"); // use this secret!
 const jwt = require('jsonwebtoken')
 const User = require('../users/users-model')
+const db = require('../../data/db-config')
 
 const restricted = (req, res, next) => {
   /*
@@ -65,11 +66,14 @@ const checkUsernameExists = async(req, res, next) => {
     }
   */
     const {username} = req.body
-    const exists = await User.findBy(username)
+    const exists = await User.findBy({username})
 
     if(!exists){
       next({status: 401, message: 'Invalid credentials'})
     }else{
+      const hashed = await db('users').where('users.username', username).select('users.password')
+      const passy = hashed[0].password
+      req.password = passy
       next()
     }
 }
@@ -98,7 +102,7 @@ const validateRoleName = (req, res, next) => {
     const {role_name} = req.body
 
     if(!role_name){
-      req.role_name = 'student'
+      req.body.role_name = 'student'
       next()
     }else if (role_name.trim().length > 32){
       next({status: 422, message: "Role name can not be longer than 32 chars" })
